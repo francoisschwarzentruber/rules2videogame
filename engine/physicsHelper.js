@@ -1,32 +1,36 @@
 
-export function intersects(o1, o2) { return Geometry.distance(o1, o2) < o1.radius + o2.radius; }
-export function isInside(o1, o2) { return Geometry.distance(o1, o2) < o2.radius - (o1.radius ? o1.radius : 0); }
 
-export function ensurePositionInside(o1, collection) {
-    if (Array.from(collection).filter((b) => isInside(o1, b)).length > 0)
-        return;
-    //const cI = Array.from(collection).filter((b) => intersects(o1, b));
 
-    const cI = Array.from(collection).sort(
-        (b, b2) => Geometry.distance(o1, b) > Geometry.distance(o1, b2) ? 1 : -1);
 
-    if (cI.length == 0)
-        return; //too bad
-
-    //    if (cI.length > 1)
-    //      return;
-
-    const o2 = cI[0];
-    const angle = Math.atan2(o1.position.y - o2.position.y, o1.position.x - o2.position.x);
-    const dr = o2.radius - o1.radius;
-    o1.position = { x: o2.position.x + dr * Math.cos(angle), y: o2.position.y + dr * Math.sin(angle) }
-
-}
 
 
 
 
 export class Geometry {
+    static intersects(o1, o2) { return Geometry.distance(o1, o2) < o1.radius + o2.radius; }
+    static isInside(o1, o2) { return Geometry.distance(o1, o2) < o2.radius - (o1.radius ? o1.radius : 0); }
+
+    static ensurePositionInside(o1, collection) {
+        if (Array.from(collection).filter((b) => isInside(o1, b)).length > 0)
+            return;
+        //const cI = Array.from(collection).filter((b) => intersects(o1, b));
+    
+        const cI = Array.from(collection).sort(
+            (b, b2) => Geometry.distance(o1, b) > Geometry.distance(o1, b2) ? 1 : -1);
+    
+        if (cI.length == 0)
+            return; //too bad
+    
+        //    if (cI.length > 1)
+        //      return;
+    
+        const o2 = cI[0];
+        const angle = Math.atan2(o1.position.y - o2.position.y, o1.position.x - o2.position.x);
+        const dr = o2.radius - o1.radius;
+        o1.position = { x: o2.position.x + dr * Math.cos(angle), y: o2.position.y + dr * Math.sin(angle) }
+    
+    }
+
     static pointFromRadiusAngle(r, a) {
         return { x: r * Math.cos(a), y: r * Math.sin(a) };
     }
@@ -45,9 +49,9 @@ export class Geometry {
         return Math.sqrt((v.x) ** 2 + (v.y) ** 2);
     }
 
-    static normalize(v) {
+    static normalize(v, factor = 1) {
         const d = Geometry.norm(v);
-        return { x: v.x / d, y: v.y / d };
+        return { x: factor*v.x / d, y: factor* v.y / d };
     }
     static distance(a, b) {
         if (a.position)
@@ -169,6 +173,14 @@ export class Geometry {
         return V.every((u, i) => seen[i]);
     }
 
+
+    static touches(o1ToMove, o2Fixed) {
+        const d = Geometry.distance(o1ToMove, o2Fixed);
+        const dr = d - o1ToMove.radius - o2Fixed.radius;
+        const angle = Math.atan2(o1ToMove.position.y - o2Fixed.position.y, o1ToMove.position.x - o2Fixed.position.x);
+        o1ToMove.position = { x: o1ToMove.position.x - dr * Math.cos(angle), y: o1ToMove.position.y - dr * Math.sin(angle) }
+    
+    }
 }
 
 export function moveOutside(o1ToMove, o2Fixed) {

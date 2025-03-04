@@ -5,9 +5,36 @@ function* DFS(node) {
             if (node[attr] != undefined)
                 yield* DFS(node[attr]);
     }
+    else
+        if (node instanceof Array) {
+            yield node;
+            for (const child of node)
+                yield* DFS(child);
+        }
 }
 
 
+
+function deleteIn(node, tobeDeleted) {
+    if (node instanceof Array) {
+        for (let i = 0; i < node.length; i++)
+            if (node[i] == tobeDeleted) {
+                node.splice(i, 1);
+                return;
+            }
+            else
+                deleteIn(node[i], tobeDeleted);
+    }
+    else
+        if (node instanceof Object) {
+            for (const attr in node)
+                if (node[attr] == tobeDeleted)
+                    node[attr] = undefined;
+                else if (node[attr] != undefined)
+                    deleteIn(node[attr], tobeDeleted);
+        }
+
+}
 
 
 
@@ -41,6 +68,16 @@ export default class Engine {
     }
 
 
+    static delete(o) {
+        deleteIn(Engine.data, o);
+    }
+
+    static add(o) {
+        if (Engine.data.scene.objects == undefined)
+            Engine.data.scene.objects = [];
+        Engine.data.scene.objects.push(o);
+    }
+
     static some(predicate) {
         for (const Y of DFS(Engine.data))
             if (predicate(Y))
@@ -48,7 +85,7 @@ export default class Engine {
         return false;
     }
 
-    
+
     static get objects() {
         return DFS(Engine.data);
     }
