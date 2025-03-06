@@ -3,6 +3,8 @@ import Engine from "./core.js";
 Engine.data.SCENE_CIRCLEENGINE_LOGO = Engine.newId();
 
 Engine.addRule((G) => {
+    if (!G.scene)
+        G.scene = {};
     if (G.scene.sceneName == G.SCENE_CIRCLEENGINE_LOGO)
         return;
 

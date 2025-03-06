@@ -1,0 +1,54 @@
+<html>
+
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.0/nipplejs.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            background-color: black;
+            height: 100%;
+        }
+
+        canvas {
+            padding: 0;
+            margin: auto;
+            display: block;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="640" height="480">
+    </canvas>
+    <script type="module">
+        import Engine from "./core/core.js";
+        import "./core/graphics.js";
+        import "./core/camera.js";
+        import "./core/input.js";
+        import "./core/physics.js";
+        import "./core/timer.js";
+        import "./core/scene_circleengine_logo.js";
+        import "./core/person.js";
+        import "./core/tree.js";
+        import { Sound } from "./core/sound.js";
+        import { Geometry } from "./core/physicsHelper.js";
+        import "./_main.js";
+
+    </script>
+</body>
+
+</html>

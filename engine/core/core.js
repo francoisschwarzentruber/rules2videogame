@@ -96,8 +96,6 @@ export default class Engine {
 window.data = Engine.data;
 
 function step() {
-    for (const r of rulesGlobal)
-        r(Engine.data);
 
     for (const r of rules1) {
         const gen = DFS(Engine.data);
@@ -105,6 +103,15 @@ function step() {
             r(X, Engine.data)
         }
     }
+
+    for (const r of rulesGlobal)
+        try {
+            r(Engine.data);
+        }
+        catch (err) {
+            console.error(err)
+        }
+
 
     for (const r of rules2) {
         for (const X of DFS(Engine.data))
