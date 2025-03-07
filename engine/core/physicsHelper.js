@@ -14,21 +14,21 @@ export class Geometry {
         if (Array.from(collection).filter((b) => isInside(o1, b)).length > 0)
             return;
         //const cI = Array.from(collection).filter((b) => intersects(o1, b));
-    
+
         const cI = Array.from(collection).sort(
             (b, b2) => Geometry.distance(o1, b) > Geometry.distance(o1, b2) ? 1 : -1);
-    
+
         if (cI.length == 0)
             return; //too bad
-    
+
         //    if (cI.length > 1)
         //      return;
-    
+
         const o2 = cI[0];
         const angle = Math.atan2(o1.position.y - o2.position.y, o1.position.x - o2.position.x);
         const dr = o2.radius - o1.radius;
         o1.position = { x: o2.position.x + dr * Math.cos(angle), y: o2.position.y + dr * Math.sin(angle) }
-    
+
     }
 
     static pointFromRadiusAngle(r, a) {
@@ -51,7 +51,7 @@ export class Geometry {
 
     static normalize(v, factor = 1) {
         const d = Geometry.norm(v);
-        return { x: factor*v.x / d, y: factor* v.y / d };
+        return { x: factor * v.x / d, y: factor * v.y / d };
     }
     static distance(a, b) {
         if (a.position)
@@ -179,26 +179,27 @@ export class Geometry {
         const dr = d - o1ToMove.radius - o2Fixed.radius;
         const angle = Math.atan2(o1ToMove.position.y - o2Fixed.position.y, o1ToMove.position.x - o2Fixed.position.x);
         o1ToMove.position = { x: o1ToMove.position.x - dr * Math.cos(angle), y: o1ToMove.position.y - dr * Math.sin(angle) }
-    
+
     }
+
+    static moveOutside(o1ToMove, o2Fixed) {
+        const d = Geometry.distance(o1ToMove, o2Fixed);
+        const dr = d - o1ToMove.radius - o2Fixed.radius;
+        const angle = Math.atan2(o1ToMove.position.y - o2Fixed.position.y, o1ToMove.position.x - o2Fixed.position.x);
+        o1ToMove.position = { x: o1ToMove.position.x - dr * Math.cos(angle), y: o1ToMove.position.y - dr * Math.sin(angle) }
+    }
+
+
+    static bounce(toBeMoved, staticObject, SPEED = 1) {
+        const d = Geometry.distance(toBeMoved, staticObject);
+        const dr = d - toBeMoved.radius - staticObject.radius;
+        const angle = Math.atan2(toBeMoved.position.y - staticObject.position.y, toBeMoved.position.x - staticObject.position.x);
+        toBeMoved.position = { x: toBeMoved.position.x - dr * Math.cos(angle), y: toBeMoved.position.y - dr * Math.sin(angle) }
+        toBeMoved.velocity = { x: SPEED * Math.cos(angle), y: SPEED * Math.sin(angle) }
+    }
+
 }
 
-export function moveOutside(o1ToMove, o2Fixed) {
-    const d = Geometry.distance(o1ToMove, o2Fixed);
-    const dr = d - o1ToMove.radius - o2Fixed.radius;
-    const angle = Math.atan2(o1ToMove.position.y - o2Fixed.position.y, o1ToMove.position.x - o2Fixed.position.x);
-    o1ToMove.position = { x: o1ToMove.position.x - dr * Math.cos(angle), y: o1ToMove.position.y - dr * Math.sin(angle) }
-}
-
-
-export function bounce(o1, o2) {
-    const SPEED = 2;
-    const d = Geometry.distance(o1, o2);
-    const dr = d - o1.radius - o2.radius;
-    const angle = Math.atan2(o1.position.y - o2.position.y, o1.position.x - o2.position.x);
-    o1.position = { x: o1.position.x - dr * Math.cos(angle), y: o1.position.y - dr * Math.sin(angle) }
-    o1.velocity = { x: SPEED * Math.cos(angle), y: SPEED * Math.sin(angle) }
-}
 
 
 

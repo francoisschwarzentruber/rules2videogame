@@ -1,5 +1,5 @@
 import Engine from "./core.js";
-import { Geometry, moveOutside, bounce } from "./physicsHelper.js";
+import { Geometry} from "./physicsHelper.js";
 
 
 /****** acceleration and velocity */
@@ -61,7 +61,7 @@ Engine.addRule(() => {
             for (const Y of Engine.objects)
                 if (X != Y)
                     if (Y.solid && Y.fixed && Geometry.intersects(X, Y)) {
-                        moveOutside(X, Y);
+                        Geometry.moveOutside(X, Y);
                     }
 });
 
@@ -71,6 +71,7 @@ Engine.addRule(() => {
             for (const Y of Engine.objects)
                 if (X != Y)
                     if (Y.solid && !Y.fixed && Geometry.intersects(X, Y)) {
-                        bounce(X, Y);
+                        Geometry.bounce(X, Y, 1);
+                        Geometry.bounce(Y, X, 1);
                     }
 });

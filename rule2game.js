@@ -1,12 +1,15 @@
-
+/**
+ * This file is the program for transforming rules into a game
+ */
 
 
 const esprima = require('esprima')
 const fs = require('node:fs');
 
-const folder = process.argv[2];
+const folder = process.argv[2]; //folder containing the game files (the rules)
 
 let contentMainFile = "";
+let irule = 0;
 
 if (!fs.existsSync(folder + "/public"))
     fs.mkdirSync(folder + "/public");
@@ -29,6 +32,8 @@ function filerule2jsfile(filename) {
             console.error(err);
             return;
         }
+
+        text = text.replaceAll("//@init", "_init=0"); //hack between esprima does not parse comments...grrr....
         const parseTree = esprima.parseScript(text, { range: true })
         const output = parseTree2js(text, parseTree.body);
 
@@ -42,38 +47,102 @@ function filerule2jsfile(filename) {
 }
 
 
-
-function parseTree2js(text, parseTree) {
+/**
+ * 
+ * @param {*} ruleText text of the rules (we need it to get the JS code from the parse tree)
+ * @param {*} parseTree parse tree of the rules
+ * @returns the javascript program corresponding to the rules 
+ */
+function parseTree2js(ruleText, parseTree) {
     let result = "";
 
     result += 'import Engine from "./core/core.js"\n';
-    result += 'import { Geometry, moveOutside, bounce } from "./core/physicsHelper.js";\n';
+    result += 'import { Geometry } from "./core/physicsHelper.js";\n';
     result += 'import { Sound } from "./core/sound.js";\n'
+    result += 'const G = Engine.data;\n';
+    result += '\n';
+
+    /**
+     * 
+     * @param {*} T parse subtree
+     * @returns the string of the JS code associated with T
+     */
     function ast2Text(T) {
-        return text.substring(T.range[0], T.range[1]);
+        return ruleText.substring(T.range[0], T.range[1]);
     }
 
-    for (const rule of parseTree) {
-        result += "Engine.addRule((G) => {\n";
-        const c = ast2Text(rule.test);
-        const body = ast2Text(rule.consequent);
+    let isNextRuleInit = false;
+    for (const block of parseTree) {
+        if (block.type == 'IfStatement') {
+            result += "Engine.addRule((G) => {\n";
+            const c = ast2Text(block.test);
+            const body = ast2Text(block.consequent);
 
-        const hasX = c.indexOf("X.") >= 0;
-        const hasY = c.indexOf("Y.") >= 0;
+            const hasX = c.indexOf("X.") >= 0;
+            const hasY = c.indexOf("Y.") >= 0;
 
-        if (hasX && !hasY)
-            result += "for(const X of Engine.objects)\n";
-        else if (hasX && hasY) {
-            result += "for(const X of Engine.objects)\n";
-            result += "for(const Y of Engine.objects)\n";
+            if (hasX && !hasY)
+                result += "for(const X of Engine.objects)\n";
+            else if (hasX && hasY) {
+                result += "for(const X of Engine.objects)\n";
+                result += "for(const Y of Engine.objects)\n";
+            }
+            else if (!hasX && hasY) {
+                throw "error: Y cannot appear without X (because it is a first version)";
+            }
+
+            //contains the fluent set to true when the rule is applied. They are set to false when the condition becomes false.
+            const initializerFluents = [];
+
+            function isInitRule() {
+                return isNextRuleInit;
+            }
+
+
+
+            if (isInitRule()) {
+                console.log("init rule!")
+                initializerFluents.push(`G._rule${irule}`);
+                if (hasX)
+                    initializerFluents.push(`X._rule${irule}`);
+                if (hasY)
+                    initializerFluents.push(`Y._rule${irule}`);
+
+            }
+
+            function conjunctionFluents() {
+                return initializerFluents.map((fluent) => " && !" + fluent).join("");
+            }
+
+            result += '{\n';
+            result += `const c = ${c}\n`;
+            result += "if(c" + conjunctionFluents() + ") {\n";
+
+            for (const fluent of initializerFluents)
+                result += fluent + " = true\n";
+            result += body + "\n}\n";
+
+            if (initializerFluents.length > 0) {
+                result += "if(!(c)) {\n";
+
+                for (const fluent of initializerFluents)
+                    result += fluent + " = undefined\n";
+                result += "}\n;"
+            }
+
+            result += "}";
+
+            result += "});\n\n"; //end of Engine.addRule(.... => ..
+            isNextRuleInit = false;
         }
-        else if (!hasX && hasY) {
-            throw "error: Y cannot appear without X (because it is a first version)";
+        else if (ast2Text(block) == "_init=0") {
+            isNextRuleInit = true;
         }
+        else
+            result += ast2Text(block) + "\n";
 
-        result += ast2Text(rule);
+        irule++;
 
-        result += "});\n\n";
     }
     return result;
 }
