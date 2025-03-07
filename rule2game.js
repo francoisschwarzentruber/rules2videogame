@@ -101,7 +101,6 @@ function parseTree2js(ruleText, parseTree) {
 
 
             if (isInitRule()) {
-                console.log("init rule!")
                 initializerFluents.push(`G._rule${irule}`);
                 if (hasX)
                     initializerFluents.push(`X._rule${irule}`);

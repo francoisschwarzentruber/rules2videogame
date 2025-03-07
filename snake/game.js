@@ -1,20 +1,17 @@
-G.SCENE_TEST = 2;
-G.sceneName = G.SCENE_TEST;
-
+G.SCENE_SNAKE = 2;
+G.sceneName = G.SCENE_SNAKE;
 
 if (G.sceneName == G.SCENE_CIRCLEENGINE_LOGO && G.keyboard.action) { //@init
-    G.sceneName = G.SCENE_TEST;
+    G.sceneName = G.SCENE_SNAKE;
 }
 
 //@init
-if (G.sceneName == G.SCENE_TEST) {
-    G.link = { person: true, acceleration: true, player: true, position: { x: 300, y: 50 }, color: "green", direction: { x: 1, y: 0 } };
+if (G.sceneName == G.SCENE_SNAKE) {
+    G.link = { person: true, acceleration: true, player: true, position: { x: 120, y: 240 }, color: "green", direction: { x: 1, y: 0 } };
     G.scene = {};
     G.scene.sky = { position: { x: 300, y: 50 }, color: "darkblue", radius: 10000, disk: true };
-    G.scene.boss = { snake: true, position: { x: 0, y: 0 } }
+    G.scene.boss = { snake: true, position: { x: 500, y: 200 } }
     G.scene.balls = [];
-    G.camera = {};
-    G.camera.follows = G.link;
 }
 
 if (G.keyboard.left) {
@@ -34,26 +31,10 @@ if (G.keyboard.down) {
     G.link.direction = { x: 0, y: 1 };
 }
 
-
-
-if (!G.keyboard.action && X.position && X.radius && X.takable && X.taken) {
-    X.taken = false;
-    X.position.x += G.link.direction.x * 32;
-    X.position.y += 32 + 16;
-    X.solid = false;
-    X.acceleration = false;
-}
-
-
-if (G.keyboard.action && X.position && X.radius && X.takable && !X.taken &&
-    Geometry.distance(G.link, X) < G.link.radius + X.radius + 4) {
-    X.taken = true;
-    X.z = 1;
-    X.solid = false;
-    X.acceleration = false;
-}
-
-
+if (G.link.position.x < 32) G.link.position.x = 32;
+if (G.link.position.x > 640 - 32) G.link.position.x = 640 - 32;
+if (G.link.position.y < 32) G.link.position.y = 32;
+if (G.link.position.y > 480 - 32) G.link.position.y = 480 - 32;
 
 //@init
 if (G.keyboard.action) {
@@ -65,9 +46,6 @@ if (G.keyboard.action) {
     });
 }
 
-
-
-
 //@init
 if (X.ball) {
     X.disk = true;
@@ -75,12 +53,6 @@ if (X.ball) {
     X.color = "white";
     X.timer = 50;
 }
-
-
-if (X.ball && X.timer <= 0)
-    Engine.delete(X);
-
-
 
 if (X.acceleration && X.velocity) {
     const fact = 0.7;
@@ -91,7 +63,7 @@ if (X.acceleration && X.velocity) {
 //@init
 if (X.snake) {
     X.body = [];
-    for (let i = 1; i < 7; i++)
+    for (let i = 1; i < 10; i++)
         X.body.push({
             solid: true,
             enemy: true,
@@ -160,8 +132,7 @@ if (X.explosion) {
     X.size = 50;
 }
 
-if (X.explosion)
-    X.radius = Math.min(X.timer * X.size / 20, X.size * (1 - X.timer / 20));
+if (X.explosion) X.radius = Math.min(X.timer * X.size / 20, X.size * (1 - X.timer / 20));
 
 
 if (X.enemy && Geometry.intersects(X, G.link)) {
