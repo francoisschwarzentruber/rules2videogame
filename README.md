@@ -45,3 +45,18 @@ The following code says that if a ball intersects an enemy, both the ball and th
 
 
 
+### Initialization rules
+
+The following rule will keep creating balls when the action key is pressed:
+
+    if(G.keyboard.action) {
+        Engine.add({ball: true, position: {x:X.link.position, y:X.link.position}})
+    }
+
+In order to create a ball just at the beginning, you may use the decorator `\\@init` :
+
+    //@init
+    if(G.keyboard.action) {
+        Engine.add({ball: true, position: {x:X.link.position, y:X.link.position}})
+    }
+
