@@ -1,18 +1,9 @@
-G.SCENE_SNAKE = 2;
-G.sceneName = G.SCENE_SNAKE;
+G.scene = {};
+G.scene.sky = { position: { x: 300, y: 50 }, color: "darkblue", radius: 10000, disk: true };
+G.scene.boss = { snake: true, position: { x: 500, y: 200 } }
+G.scene.balls = [];
+G.link = { person: true, acceleration: true, player: true, position: { x: 120, y: 240 }, color: "green", direction: { x: 1, y: 0 } };
 
-if (G.sceneName == G.SCENE_CIRCLEENGINE_LOGO && G.keyboard.action) { //@init
-    G.sceneName = G.SCENE_SNAKE;
-}
-
-//@init
-if (G.sceneName == G.SCENE_SNAKE) {
-    G.link = { person: true, acceleration: true, player: true, position: { x: 120, y: 240 }, color: "green", direction: { x: 1, y: 0 } };
-    G.scene = {};
-    G.scene.sky = { position: { x: 300, y: 50 }, color: "darkblue", radius: 10000, disk: true };
-    G.scene.boss = { snake: true, position: { x: 500, y: 200 } }
-    G.scene.balls = [];
-}
 
 if (G.keyboard.left) {
     G.link.acceleration.x -= 1;

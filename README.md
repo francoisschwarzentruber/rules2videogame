@@ -1,3 +1,42 @@
 # rules2videogame
 
 This repository enables to create very simple video game by writing **rules**.
+
+
+## Usage
+
+Create a folder containing .js file containing rules (see below what is a rule). For instance, a folder named `snake` (see Example).
+
+    node rules2game.js <folder containing the rules>
+
+For instance:
+
+    node rules2game.js snake
+
+It generates a subfolder `public` containing the game that you can deploy on the Internet.
+
+
+## Example of rules
+
+The following rule says that if the left key is pressed, then substract 1 to the x-coordinate of the acceleration, and set the direction of the player to (-1, 0):
+
+    if (G.keyboard.left) {
+        G.link.acceleration.x -= 1;
+        G.link.direction = { x: -1, y: 0 };
+    }
+
+
+The following code says that if the player intersects an enemy, then play the sound "hurt.ogg" and make the player bounce.
+
+    if (X.enemy && Geometry.intersects(X, G.link)) {
+        Sound.play("hurt.ogg");
+        Geometry.bounce(G.link, X, 5);
+    }
+
+
+The following code says that if a ball intersects an enemy, both the ball and the enemy disappear:
+
+    if(X.enemy && Y.ball && Geometry.intersects(X, Y)) {
+        Engine.delete(X);
+        Engine.delete(Y);
+    }
