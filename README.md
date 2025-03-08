@@ -1,6 +1,6 @@
 # rules2videogame
 
-This repository enables to create very simple video game by writing **rules**.
+This repository enables to create very simple video games by writing **rules**. For the moment, objects are circles.
 
 
 ## Usage
@@ -13,7 +13,7 @@ For instance:
 
     node rules2game.js snake
 
-It generates a subfolder `public` containing the game that you can deploy on the Internet.
+It generates a subfolder `public` containing the stand-alone game that you can deploy on the Internet.
 
 
 ## Example of rules
@@ -26,7 +26,7 @@ The following rule says that if the left key is pressed, then substract 1 to the
     }
 
 
-The following code says that if the player intersects an enemy, then play the sound "hurt.ogg" and make the player bounce.
+The following code says that if the player intersects an enemy, then play the sound "hurt.ogg" and make the player bounce. The symbol `X` is a universally quantified variable.
 
     if (X.enemy && Geometry.intersects(X, G.link)) {
         Sound.play("hurt.ogg");
@@ -34,9 +34,14 @@ The following code says that if the player intersects an enemy, then play the so
     }
 
 
-The following code says that if a ball intersects an enemy, both the ball and the enemy disappear:
+The following code says that if a ball intersects an enemy, both the ball and the enemy disappear. Both `X` and `Y` are universally quantified variables.
 
     if(X.enemy && Y.ball && Geometry.intersects(X, Y)) {
         Engine.delete(X);
         Engine.delete(Y);
+        Engine.add({explosion: true, position: X.position});
     }
+
+
+
+
