@@ -1,3 +1,5 @@
+import {handleCamera} from "./camera.js";
+
 function* DFS(node) {
     if (node instanceof Object) {
         yield node;
@@ -126,8 +128,9 @@ const ctx = canvas.getContext("2d");
 function animate() {
     ctx.resetTransform();
     ctx.clearRect(0, 0, 640, 480);
-    requestAnimationFrame(animate);
+    handleCamera();
     step();
+    requestAnimationFrame(animate);
 }
 
 animate();

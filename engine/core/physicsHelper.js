@@ -38,6 +38,10 @@ export class Geometry {
         return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
     }
 
+    static vectorFromPolar(a, r = 1) {
+        return { x: r * Math.cos(a), y: r * Math.sin(a) };
+    }
+
     static angleBetween(o1, o2) {
         return Math.atan2(o2.y - o1.y, o2.x - o1.x)
     }

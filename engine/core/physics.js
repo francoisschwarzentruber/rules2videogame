@@ -1,5 +1,5 @@
 import Engine from "./core.js";
-import { Geometry} from "./physicsHelper.js";
+import { Geometry } from "./physicsHelper.js";
 
 
 /****** acceleration and velocity */
@@ -23,29 +23,13 @@ Engine.addRule((X, G) => {
     }
 
     if (X.velocity) {
-        if (!X.position)
+        if (X.position == undefined)
             X.position = {};
         X.position.x += dt * X.velocity.x;
         X.position.y += dt * X.velocity.y;
     }
 });
 
-
-
-
-/** gravity */
-
-Engine.addRule((X) => {
-    if (X.gravity) {
-        X.acceleration = { x: 0, y: 0 };
-    }
-});
-
-Engine.addRule((X) => {
-    if (X.gravity) {
-        X.acceleration.y += 1;
-    }
-});
 
 
 
