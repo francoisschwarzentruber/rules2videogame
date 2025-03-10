@@ -1,4 +1,4 @@
-import {handleCamera} from "./camera.js";
+import { handleCamera } from "./camera.js";
 
 function* DFS(node) {
     if (node instanceof Object) {
@@ -98,14 +98,6 @@ export default class Engine {
 window.data = Engine.data;
 
 function step() {
-
-    for (const r of rules1) {
-        const gen = DFS(Engine.data);
-        for (const X of gen) {
-            r(X, Engine.data)
-        }
-    }
-
     for (const r of rulesGlobal)
         try {
             r(Engine.data);
@@ -114,12 +106,11 @@ function step() {
             console.error(err)
         }
 
-
-    for (const r of rules2) {
-        for (const X of DFS(Engine.data))
-            for (const Y of DFS(Engine.data)) {
-                r(X, Y, Engine.data);
-            }
+    for (const r of rules1) {
+        const gen = DFS(Engine.data);
+        for (const X of gen) {
+            r(X, Engine.data)
+        }
     }
 
 }

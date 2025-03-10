@@ -31,14 +31,11 @@ export class Geometry {
 
     }
 
-    static pointFromRadiusAngle(r, a) {
-        return { x: r * Math.cos(a), y: r * Math.sin(a) };
-    }
     static pointFromCenterRadiusAngle(cx, cy, r, a) {
         return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
     }
 
-    static vectorFromPolar(a, r = 1) {
+    static vectorFromPolar(a, r = 1.0) {
         return { x: r * Math.cos(a), y: r * Math.sin(a) };
     }
 
