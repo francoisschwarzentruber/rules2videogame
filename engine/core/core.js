@@ -1,7 +1,11 @@
 import { handleCamera } from "./camera.js";
 
+let fadeOut = 0;
+
 function* DFS(node) {
     if (node instanceof Object) {
+        if (node.paused)
+            return;
         yield node;
         for (const attr in node)
             if (node[attr] != undefined)
@@ -44,6 +48,7 @@ const rules1 = [];
 const rules2 = [];
 const rulesS = [];
 const rulesGlobal = [];
+const rulesGlobalAfter = [];
 
 export default class Engine {
     static data = {};
@@ -65,10 +70,20 @@ export default class Engine {
             console.error("signature of a rule unclear");
     }
 
+
+    static addRuleAfter(f) {
+        rulesGlobalAfter.push(f);
+    }
+
     static newId() {
         return Math.floor(Math.random() * 1000000);
     }
 
+
+
+    static fadeOut() {
+        fadeOut = 50;
+    }
 
     static delete(o) {
         deleteIn(Engine.data, o);
@@ -98,6 +113,7 @@ export default class Engine {
 window.data = Engine.data;
 
 function step() {
+
     for (const r of rulesGlobal)
         try {
             r(Engine.data);
@@ -113,14 +129,32 @@ function step() {
         }
     }
 
+
+    for (const r of rulesGlobalAfter)
+        try {
+            r(Engine.data);
+        }
+        catch (err) {
+            console.error(err)
+        }
+
 }
 
 const ctx = canvas.getContext("2d");
+
+
 function animate() {
     ctx.resetTransform();
-    ctx.clearRect(0, 0, 640, 480);
-    handleCamera();
-    step();
+    if (fadeOut > 0) {
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fillRect(0, 0, 640, 480);
+        fadeOut--;
+    }
+    else {
+        ctx.clearRect(0, 0, 640, 480);
+        handleCamera();
+        step();
+    }
     requestAnimationFrame(animate);
 }
 

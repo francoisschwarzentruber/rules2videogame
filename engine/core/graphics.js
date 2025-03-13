@@ -83,7 +83,8 @@ Engine.addRule((X) => {
 
 Engine.addRule((X) => {
     if (X.text && X.position) {
-        ctx.fillStyle = X.color;
+        ctx.fillStyle = X.color ? X.color : "white";
+        ctx.font = `bold ${X.size ? X.size : 12}px sans serif`;
         ctx.fillText(X.text, X.position.x, X.position.y);
     }
 });

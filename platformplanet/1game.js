@@ -5,9 +5,6 @@ const ACCELERATION = 3;
 
 
 
-
-
-
 //@init
 if (G.sceneName == G.SCENE_PLANET) {
     G.previousSceneName = G.SCENE_TEST;

@@ -17,6 +17,7 @@ export default class Input {
         Engine.data.keyboard.down = Input.keys["ArrowDown"];
         Engine.data.keyboard.right = Input.keys["ArrowRight"];
         Engine.data.keyboard.action = Input.keys[" "];
+        Engine.data.keyboard.escape = Input.keys["Escape"];
     }
 }
 

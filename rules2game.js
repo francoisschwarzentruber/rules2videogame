@@ -59,6 +59,8 @@ function parseTree2js(ruleText, parseTree) {
     result += 'import Engine from "./core/core.js"\n';
     result += 'import { Geometry } from "./core/physicsHelper.js";\n';
     result += 'import { Sound } from "./core/sound.js";\n'
+    result += 'import { Music } from "./core/music.js";\n'
+    result += 'import { Color } from "./core/color.js";\n\n'
     result += 'const G = Engine.data;\n';
     result += '\n';
 
@@ -74,9 +76,14 @@ function parseTree2js(ruleText, parseTree) {
     let isNextRuleInit = false;
     for (const block of parseTree) {
         if (block.type == 'IfStatement') {
-            result += "Engine.addRule((G) => {\n";
             const c = ast2Text(block.test);
             const body = ast2Text(block.consequent);
+
+            if (body.indexOf("fadeOut") >= 0) //ugly but very pragmatic
+                result += "Engine.addRuleAfter((G) => {\n";
+            else
+                result += "Engine.addRule((G) => {\n";
+
 
             const hasX = c.indexOf("X.") >= 0;
             const hasY = c.indexOf("Y.") >= 0;
