@@ -220,3 +220,11 @@ if (G.link.hurt) {
 if (!G.link.hurt) {
     G.link.color = "green";
 }
+
+
+
+
+if (X.r && X.angle) {
+    X.x = X.r * Math.cos(X.angle);
+    X.y = X.r * Math.sin(X.angle);
+}

@@ -2,7 +2,7 @@
 if (X.person) {
     X.disk = true;
     X.solid = true;
-    X.radius = 32;
+    X.radius = 20;
     X.direction = { x: 1, y: 0 };
 }
 

@@ -82,7 +82,7 @@ export default class Engine {
 
 
     static fadeOut() {
-        fadeOut = 50;
+        fadeOut = 25;
     }
 
     static delete(o) {
@@ -90,9 +90,11 @@ export default class Engine {
     }
 
     static add(o) {
-        if (Engine.data.scene.objects == undefined)
-            Engine.data.scene.objects = [];
-        Engine.data.scene.objects.push(o);
+        /* if (Engine.data.scene.objects == undefined)
+             Engine.data.scene.objects = [];*/
+        //Engine.data.scene.objects.push(o);
+        const newId = "o" + Engine.newId();
+        Engine.data.scene[newId] = o;
     }
 
     static some(predicate) {

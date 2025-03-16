@@ -1,7 +1,6 @@
 //@init
 if (X.person) {
     X.disk = true;
-    X.solid = true;
     X.radius = 32;
     X.eye = { eye: true, position: { x: 0, y: 0 } };
 }

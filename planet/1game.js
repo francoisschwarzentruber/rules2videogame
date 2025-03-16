@@ -28,11 +28,11 @@ if (G.sceneName == G.SCENE_PLANET) {
 
     G.scene.sky = { disk: true, position: { x: 0, y: 0 }, radius: 30000, color: "lightblue" };
 
-    G.scene.montains = [];
+    G.scene.decorationMontains = [];
     for (let i = 0; i < 40; i++) {
-        G.scene.montains.push({
+        G.scene.decorationMontains.push({
             disk: true, fixed: true,
-            position: Geometry.vectorFromPolar(i * 2 * Math.PI / 40 + Math.random() / 10, R - 80 + Math.random() * 50),
+            position: Geometry.vectorFromPolar(i * 2 * Math.PI / 40 + Math.random() / 10, R - 80 + Math.random() * 20),
             radius: 100,
             color: "lightgreen"
         });
@@ -40,10 +40,24 @@ if (G.sceneName == G.SCENE_PLANET) {
     }
 
 
+
+    G.scene.mountain = {
+        disk: true, fixed: true, solid: true,
+        position: { r: 550, angle: -2 },
+        radius: 100,
+        color: "brown"
+    };
+
+
+
     G.sun = { disk: true, sun: true, angle: Math.PI / 2, position: { x: 0, y: 0 }, radius: 32, color: "yellow" };
     G.scene.planet = { disk: true, fixed: true, solid: true, position: { x: 0, y: 0 }, radius: R, color: "green" };
+
+    G.scene.lake = { lake: true, disk: true, position: { r: 450, angle: 0 }, radius: 100, color: "blue" };
+
+
     G.link = {
-        gravity: true, person: true, player: true,
+        gravity: true, person: true, solid:true, player: true,
         acceleration: { x: 0, y: 0 }, position: { x: 0, y: -R - 100 },
         color: "blue", direction: { x: 1, y: 0 }
     };
@@ -120,4 +134,12 @@ if (true) {
 if (X.star) {
     const dif = getDiffAngle();
     X.color = `rgba(255, 255, 255, ${1 - dif / Math.PI})`;
+}
+
+
+
+
+if (X.r && X.angle) {
+    X.x = X.r * Math.cos(X.angle);
+    X.y = X.r * Math.sin(X.angle);
 }
