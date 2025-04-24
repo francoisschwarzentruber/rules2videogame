@@ -3,6 +3,7 @@ if (X.person) {
     X.disk = true;
     X.solid = true;
     X.radius = 20;
+    X.stroke = "black";
     X.direction = { x: 1, y: 0 };
 }
 

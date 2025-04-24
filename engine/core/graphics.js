@@ -62,32 +62,42 @@ CanvasRenderingContext2D.prototype.arrow = function (x, y, angle, S = 16, A = 0.
 
 
 Engine.addRule((X) => {
-    if (X.disk && X.position && X.color) {
-        ctx.fillStyle = X.color;
-        ctx.disk(X.position.x, X.position.y, X.radius);
-        /* ctx.strokeStyle = "black";
-         ctx.lineWidth = 2;
-         ctx.circle(X.position.x, X.position.y, X.radius);*/
+    if (X.disk && X.position) {
+
+        if (X.color) {
+            ctx.fillStyle = X.color;
+            ctx.disk(X.position.x, X.position.y, X.radius);
+        }
+
+        if (X.stroke) {
+            ctx.strokeStyle = X.stroke;
+            ctx.lineWidth = 2;
+            ctx.circle(X.position.x, X.position.y, X.radius);
+        }
     }
 });
+
+
+
+
 
 Engine.addRule((X) => {
-    if (X.disk && X.position && X.color && (X.z == 1)) {
-        ctx.fillStyle = X.color;
-        ctx.disk(X.position.x, X.position.y, X.radius);
-        /*ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.circle(X.position.x, X.position.y, X.radius);*/
+    if (X.rectangle && X.position) {
+        if (X.color) {
+            ctx.fillStyle = X.color;
+            ctx.fillRect(X.position.x, X.position.y, X.width, X.height);
+        }
+
+        if (X.stroke) {
+            ctx.strokeStyle = X.stroke;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(X.position.x, X.position.y, X.width, X.height);
+
+        }
     }
 });
 
 
-Engine.addRule((X) => {
-    if (X.rectangle && X.position && X.color) {
-        ctx.fillStyle = X.color;
-        ctx.fillRect(X.position.x, X.position.y, X.width, X.height);
-    }
-});
 
 Engine.addRule((X) => {
     if (X.text && X.position) {

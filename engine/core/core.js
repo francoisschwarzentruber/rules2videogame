@@ -46,8 +46,6 @@ function deleteIn(node, tobeDeleted) {
 
 
 const rules1 = [];
-const rules2 = [];
-const rulesS = [];
 const rulesGlobal = [];
 const rulesGlobalAfter = [];
 
@@ -63,10 +61,6 @@ export default class Engine {
             rules1.push(f);
         else if (str.startsWith("(G)") || str.startsWith("()"))
             rulesGlobal.push(f);
-        /* else if (str.startsWith("(X, Y)"))
-             rules2.push(f);
-         else if (str.startsWith("(X, Y, G)"))
-             rules2.push(f);*/
         else
             console.error("signature of a rule unclear");
     }
