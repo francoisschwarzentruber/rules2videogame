@@ -65,9 +65,9 @@ Engine.addRule((X) => {
     if (X.disk && X.position && X.color) {
         ctx.fillStyle = X.color;
         ctx.disk(X.position.x, X.position.y, X.radius);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.circle(X.position.x, X.position.y, X.radius);
+        /* ctx.strokeStyle = "black";
+         ctx.lineWidth = 2;
+         ctx.circle(X.position.x, X.position.y, X.radius);*/
     }
 });
 
@@ -75,9 +75,17 @@ Engine.addRule((X) => {
     if (X.disk && X.position && X.color && (X.z == 1)) {
         ctx.fillStyle = X.color;
         ctx.disk(X.position.x, X.position.y, X.radius);
-        ctx.strokeStyle = "black";
+        /*ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
-        ctx.circle(X.position.x, X.position.y, X.radius);
+        ctx.circle(X.position.x, X.position.y, X.radius);*/
+    }
+});
+
+
+Engine.addRule((X) => {
+    if (X.rectangle && X.position && X.color) {
+        ctx.fillStyle = X.color;
+        ctx.fillRect(X.position.x, X.position.y, X.width, X.height);
     }
 });
 
@@ -86,5 +94,76 @@ Engine.addRule((X) => {
         ctx.fillStyle = X.color ? X.color : "white";
         ctx.font = `bold ${X.size ? X.size : 12}px sans serif`;
         ctx.fillText(X.text, X.position.x, X.position.y);
+    }
+});
+
+
+
+
+const imgCache = {};
+
+Engine.addRule((X) => {
+    if (X.image && (X._img == undefined)) {
+        if (imgCache[X.image]) {
+            X._img = imgCache[X.image];
+            X._imgready = true;
+            X.width = X._img.width;
+            X.height = X._img.height;
+            return;
+        }
+
+
+        if (X.image.endsWith(".png")) {
+            X._img = new Image();
+            imgCache[X.image] = X._img;
+            X._img.src = X.image;
+            X._img.onload = () => {
+                X._imgready = true;
+                X.width = X._img.width;
+                X.height = X._img.height;
+            }
+        }
+        else {
+            function charToColor(char) {
+                const colors = {
+                    "R": "red",
+                    "b": "blue",
+                    "G": "green",
+                    "B": "black",
+                    "Y": "yellow",
+                    "O": "orange"
+                }
+                return colors[char];
+            }
+
+
+            const canvas = document.createElement("canvas");
+            X._img = canvas;
+            canvas.width = 32;
+            canvas.height = 32;
+            X.width = canvas.width;
+            X.height = canvas.height;
+            X._imgready = true;
+            imgCache[X.image] = X._img;
+
+            const ctx = canvas.getContext("2d");
+            const string = X.image;
+
+            (string).split("\n").forEach((line, iy) => {
+                for (let ix = 0; ix < line.length; ix++) if (line[ix] != " ") {
+                    ctx.fillStyle = charToColor(line[ix]);
+                    ctx.fillRect(ix, iy, 1, 1);
+                }
+            });
+
+        }
+
+    }
+});
+
+
+Engine.addRule((X) => {
+    if (X.image && X._imgready) {
+        ctx.drawImage(X._img, X.position.x, X.position.y);
     }
 });

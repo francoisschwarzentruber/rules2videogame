@@ -8,8 +8,9 @@ function* DFS(node) {
             return;
         yield node;
         for (const attr in node)
-            if (node[attr] != undefined)
-                yield* DFS(node[attr]);
+            if (!attr.startsWith("_")) // do not traverse fields like "_img" etc.
+                if (node[attr] != undefined)
+                    yield* DFS(node[attr]);
     }
     else
         if (node instanceof Array) {

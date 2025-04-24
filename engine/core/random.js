@@ -9,3 +9,10 @@ export function randomColorAlpha(r, g, b, a, AMPLI = 128) {
     const minmax = (v) => Math.min(255, Math.max(v, 0));
     return `rgba(${minmax(r + randomAmplitude(AMPLI))}, ${minmax(g + randomAmplitude(AMPLI))},  ${minmax(b + randomAmplitude(AMPLI), 0)}, ${a})`
 }
+
+
+export class Random {
+    static choice(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+}

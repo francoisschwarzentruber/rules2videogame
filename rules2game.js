@@ -61,6 +61,8 @@ function parseTree2js(ruleText, parseTree) {
     result += 'import { Sound } from "./core/sound.js";\n'
     result += 'import { Music } from "./core/music.js";\n'
     result += 'import { Color } from "./core/color.js";\n\n'
+    result += 'import { Random } from "./core/random.js";\n\n'
+
     result += 'const G = Engine.data;\n';
     result += '\n';
 

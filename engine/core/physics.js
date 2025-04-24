@@ -44,18 +44,13 @@ Engine.addRule(() => {
         if (X.solid && !X.fixed)
             for (const Y of Engine.objects)
                 if (X != Y)
-                    if (Y.solid && Y.fixed && Geometry.intersects(X, Y)) {
-                        Geometry.moveOutside(X, Y);
+                    if (Y.solid && Geometry.intersects(X, Y)) {
+                        if (Y.fixed)
+                            Geometry.moveOutside(X, Y);
+                        else {
+                            Geometry.bounce(X, Y, 1);
+                            Geometry.bounce(Y, X, 1);
+                        }
                     }
 });
 
-Engine.addRule(() => {
-    for (const X of Engine.objects)
-        if (X.solid && !X.fixed)
-            for (const Y of Engine.objects)
-                if (X != Y)
-                    if (Y.solid && !Y.fixed && Geometry.intersects(X, Y)) {
-                        Geometry.bounce(X, Y, 1);
-                        Geometry.bounce(Y, X, 1);
-                    }
-});
