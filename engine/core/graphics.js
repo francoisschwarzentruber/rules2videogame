@@ -147,10 +147,13 @@ Engine.addRule((X) => {
             }
 
 
+
+            const scale = X.scale ? X.scale : 1;
+
             const canvas = document.createElement("canvas");
             X._img = canvas;
-            canvas.width = 32;
-            canvas.height = 32;
+            canvas.width = 32 * scale;
+            canvas.height = 32 * scale;
             X.width = canvas.width;
             X.height = canvas.height;
             X._imgready = true;
@@ -159,12 +162,13 @@ Engine.addRule((X) => {
             const ctx = canvas.getContext("2d");
             const string = X.image;
 
-            (string).split("\n").forEach((line, iy) => {
-                for (let ix = 0; ix < line.length; ix++) if (line[ix] != " ") {
-                    ctx.fillStyle = charToColor(line[ix]);
-                    ctx.fillRect(ix, iy, 1, 1);
+            string.mapTile((ix, iy, c) => {
+                if (c != " ") {
+                    ctx.fillStyle = charToColor(c);
+                    ctx.disk(scale + ix * scale, scale + iy * scale, scale);
                 }
-            });
+            }
+            );
 
         }
 

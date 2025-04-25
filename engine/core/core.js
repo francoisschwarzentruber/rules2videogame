@@ -104,7 +104,18 @@ export default class Engine {
         return DFS(Engine.data);
     }
 
+
+
 }
+
+
+String.prototype.mapTile = function (f) {
+    this.split("\n").forEach((line, iy) => {
+        for (let ix = 0; ix < line.length; ix++)
+            f(ix, iy, line[ix]);
+    });
+};
+
 
 
 window.data = Engine.data;
